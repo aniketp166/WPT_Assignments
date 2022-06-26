@@ -1,0 +1,54 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(() => {
+
+
+            $("#InsertButton").click(
+                () => {
+
+                    //input that the server needs
+                    let ip = { itemno: $("#itemno").val(), intname: $("#intname").val(), price: $("#price"), category: $("#category") };
+
+                    //show patience and keep your object and its data
+                    //correctly
+                    let parameterstothefunction =
+                    {
+                        data: ip,
+                        url: "http://localhost:901/login",
+                        type: 'get',
+                        dataType: "json",
+                        success: (datagivenbyserver) => {
+                            console.log("data given by server in success" + datagivenbyserver.status)
+                            if (datagivenbyserver.status === true) {
+                                $("#message").text("successful inserted");
+                            }
+                            else {
+                                $("#message").text("not inserted");
+                            }
+                        },
+                        error: (errorgivenbyserver) => { console.log("failed to contact server " + errorgivenbyserver) }
+                    };
+                    //time to call the function
+                    console.log("is the function working");
+                    $.ajax(parameterstothefunction);
+                }
+            );//end of registration for click event
+
+        });
+    </script>
+
+</head>
+
+<Body>
+    <Br /><input type="text" name="itemno" placeholder="itemno" />
+    <Br /><input type="text" name="intname" placeholder="intname" />
+    <Br /><input type="text" name="price" placeholder="price" />
+    <Br /><input type="text" name="category" placeholder="category" />
+
+    <button id="InsertButton">check</button>
+</Body>
+
+</html>

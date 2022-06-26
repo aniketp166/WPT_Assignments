@@ -1,0 +1,54 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script>
+        $(()=>{
+            $("#acno").blur(()=>{
+                let a=$("#acno");
+                let input={acno:a.val()};
+
+                let params={
+                    data:input,
+                    url:"http://localhost:90/bank",
+                    type:'get',
+                    dataType:'json',
+                    success:(datagivenbyserver)=>{
+                        console.log("data given by server ");
+                        if(datagivenbyserver.status===true){
+                            $("#msg").text(datagivenbyserver.accountdetails.balance);
+                        }
+                        else{
+                            $("#msg").text("Account Details Not Found");
+                        }
+                    },error:(errorgivenbyserver)=>{
+                        console.log("error given by server "+ errorgivenbyserver);
+                    }
+                };
+                $.ajax(params);
+
+
+
+            });
+
+
+
+
+        });
+
+
+
+
+    </script>
+</head>
+<body>
+        <br><br>
+        <input type="number" id="acno" placeholder="Enter Account Number ">
+        <span id="msg">Status Will be Displayed Here</span><br><br>
+
+</body>
+</html>

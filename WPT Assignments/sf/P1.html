@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Updation</title>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+    ></script>
+</head>
+<script>
+    $(()=>{
+        console.log("dom loaded");
+        function showContent(){
+           
+            let content="";
+            let ajaxparams={
+                data:{},
+                url:'http://localhost:900/showcontent',
+                type:'get',
+                dataType:'json',
+                success:(output)=>{ 
+                    
+                    for(let i=0; i<output.length;i++){
+                        console.log("inside for loop")
+
+                        content+=output[i].rollno+" , "+output[i].name+" , "+output[i].marks+"<br>";
+                    }
+                    $("#message").html(content);
+                },
+                error:(err)=>{console.log("error occured "+ err)}
+            }
+            $.ajax(ajaxparams);
+
+        }
+        $("#display").click(()=>{
+            
+            showContent();
+        })
+        
+        $("#rollno").blur(()=>{
+            console.log("blur click");
+            let input={accno:$("#rollno").val()};
+            let ajaxparams={
+                data:input,
+                url:'http://localhost:902/blurevent',
+                type:'get',
+                dataTyape:'json',
+                success:(output)=>{
+                if(output.status){
+                    $("#mssg").html("student  detail found");
+                    $("#name").val(output.studentdetails.name);
+                    $("#marks").val(output.studentdetails.marks);
+                }else{
+                    $("#mssg").html("student  detail not found");
+                    $("#name").val("");
+                    $("#marks").val("");
+                }
+            
+                },
+                error:(err)=>{console.log("error occured "+err)}
+
+            };
+            $.ajax(ajaxparams);
+
+        })
+
+        $("#update").click(()=>{
+            console.log("update click");
+            input={ rollno:$("#rollno").val(), name:$("#name").val(),marks:$("#marks").val()}
+            let ajaxparams={
+                data:input,
+                url:'http://localhost:900/updatedetail',
+                type:'get',
+                dataType:'json',
+                success:(output)=>{
+                    if(output.status){
+                        $("#mssg").html("update successfully");
+                        $("#rollno").val("");
+                        $("#name").val("");
+                        $("#marks").val("");
+
+                    }else{
+                        $("#mssg").html("Information not found in the database"); 
+                    }
+                },
+                error:(err)=>{console.log("error occured "+err)}
+
+            }
+
+            $.ajax(ajaxparams);
+            showContent();
+        })
+
+        $("#add").click(()=>{
+            console.log("add click");
+            input={ accno:$("#rollno").val(), name:$("#name").val(),balance:$("#marks").val()}
+            let ajaxparams={
+                data:input,
+                url:'http://localhost:900/adddetail',
+                type:'get',
+                dataType:'json',
+                success:(output)=>{
+                    if(output.status){
+                        $("#mssg").html("added successfully");
+                        $("#rollno").val("");
+                        $("#name").val("");
+                        $("#marks").val("");
+
+                    }else{
+                        $("#mssg").html("adding not  successfully");
+                    }
+                },
+                error:(err)=>{console.log("error occured "+ err)}
+
+            }
+
+            $.ajax(ajaxparams);
+            showContent();
+        })
+
+        
+
+
+
+    })
+</script>
+<body>
+    <form>
+        <input type="number" placeholder="Enter rollno number" id="rollno"><span id="mssg"></span><br>
+        <input type="text" placeholder="Enter your name" id="name"><br>
+        <input type="number" placeholder="Acount balance" id="marks">
+        <br><input type="button" value="Show detail" id="display">
+        <input type="button" value="update" id="update">
+        <input type="button" value="add" id="add">
+        <input type="button" value="delete" id="delete">
+
+        <br><br><span id="message">show content</span>
+
+    </form>
+</body>
+</html>
